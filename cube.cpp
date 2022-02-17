@@ -48,16 +48,24 @@ Cube::Cube() {
 	}
 }
 
+Cube::Cube(const Cube &cube) {
+	for (int face = 0; face < 6; face++) {
+		for (int tile = 0; tile < 9; tile++) {
+			m_cube[face][tile] = cube.m_cube[face][tile];
+		}
+	}
+}
+
 // Prints the cube using the first letter of the tile colors
 void Cube::print() {
 	// Face 0
-	printf("     ");
-	for (int tile = 0; tile < 3; tile++) printf(" %c", get_letter(m_cube[0][tile]));
-	printf("\n     ");
-	for (int tile = 3; tile < 6; tile++) printf(" %c", get_letter(m_cube[0][tile]));
-	printf("\n     ");
-	for (int tile = 6; tile < 9; tile++) printf(" %c", get_letter(m_cube[0][tile]));
-	printf("\n");
+	for (int row = 0; row < 3; row++) {
+		printf("     ");
+		for (int tile = 0 + (3 * row); tile < 3 + (3 * row); tile++) {
+			printf(" %c", get_letter(m_cube[0][tile]));
+		}
+		printf("\n");
+	}
 
 	// Face 1, 2, 3, 4
 	for (int row = 0; row < 3; row++) {
@@ -70,11 +78,11 @@ void Cube::print() {
 	}
 
 	// Face 5
-	printf("     ");
-	for (int tile = 0; tile < 3; tile++) printf(" %c", get_letter(m_cube[5][tile]));
-	printf("\n     ");
-	for (int tile = 3; tile < 6; tile++) printf(" %c", get_letter(m_cube[5][tile]));
-	printf("\n     ");
-	for (int tile = 6; tile < 9; tile++) printf(" %c", get_letter(m_cube[5][tile]));
-	printf("\n");
+	for (int row = 0; row < 3; row++) {
+		printf("     ");
+		for (int tile = 0 + (3 * row); tile < 3 + (3 * row); tile++) {
+			printf(" %c", get_letter(m_cube[5][tile]));
+		}
+		printf("\n");
+	}
 }

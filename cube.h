@@ -11,6 +11,7 @@ char get_letter(Color color);
 class Cube {
 	public:
 		Cube();
+		Cube(const Cube &new_cube);
 		void print();
 	private:
 		Color m_cube[6][9];

@@ -7,5 +7,7 @@ using namespace std;
 
 int main() {
 	Cube cube;
-	cube.print();
+	Cube new_cube = cube;
+
+	new_cube.print();
 }
