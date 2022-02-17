@@ -3,8 +3,9 @@
 #include <iostream>
 using namespace std;
 
-#include "engine.h"
+#include "cube.h"
 
 int main() {
-	Engine engine;
+	Cube cube;
+	cube.print();
 }

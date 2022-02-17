@@ -1,11 +1,11 @@
 CXX = g++
 CXXFLAGS = -Wall -g
 
-main: engine.o main.cpp
-	$(CXX) $(CXXFLAGS) engine.o main.cpp -o main
+main: cube.o main.cpp
+	$(CXX) $(CXXFLAGS) cube.o main.cpp -o main
 
-engine.o: engine.cpp engine.h
-	$(CXX) $(CXXFLAGS) -c engine.cpp
+cube.o: cube.cpp cube.h
+	$(CXX) $(CXXFLAGS) -c cube.cpp
 
 clean:
 	rm main
