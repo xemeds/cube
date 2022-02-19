@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <vector>
 
 using namespace std;
 
@@ -19,6 +20,7 @@ class Cube {
 		void print();
 
 		bool valid_move(string move_code);
+		vector<string> get_moves();
 		void move(string move_codes);
 		void U();
 		void D();
@@ -28,6 +30,7 @@ class Cube {
 		void B();
 	private:
 		Color m_cube[6][9];
+		vector<string> m_moves;
 
 		void rotate_face(int face);
 };
@@ -122,20 +125,25 @@ void Cube::print() {
 
 // Returns true if a given move is valid, false if not
 bool Cube::valid_move(string move_code) {
-	transform(move_code.begin(), move_code.end(), move_code.begin(), ::tolower);
+	transform(move_code.begin(), move_code.end(), move_code.begin(), ::toupper);
 
 	long unsigned int move_code_size = move_code.size();
 	if (move_code_size > 2 || move_code_size == 0) return false;
 
 	if (move_code_size == 2 && move_code[1] != '\'' && move_code[1] != '2') return false;
-	if (move_code[0] != 'u' && move_code[0] != 'd' && move_code[0] != 'l' && move_code[0] != 'r' && move_code[0] != 'f' && move_code[0] != 'b') return false;
+	if (move_code[0] != 'U' && move_code[0] != 'D' && move_code[0] != 'L' && move_code[0] != 'R' && move_code[0] != 'F' && move_code[0] != 'B') return false;
 
 	return true;
 }
 
+// Returns the performed movess on the cube
+vector<string> Cube::get_moves() {
+	return m_moves;
+}
+
 // Performs the given moves on the cube
 void Cube::move(string move_codes) {
-	transform(move_codes.begin(), move_codes.end(), move_codes.begin(), ::tolower);
+	transform(move_codes.begin(), move_codes.end(), move_codes.begin(), ::toupper);
 
 	for (long unsigned int i = 0; i < move_codes.size(); i++) {
 		string move_code;
@@ -152,26 +160,28 @@ void Cube::move(string move_codes) {
 			break;
 		}
 
-		if (move_code == "u") U();
-		else if (move_code == "d") D();
-		else if (move_code == "l") L();
-		else if (move_code == "r") R();
-		else if (move_code == "f") F();
-		else if (move_code == "b") B();
+		m_moves.push_back(move_code);
 
-		else if (move_code == "u'") U(), U(), U();
-		else if (move_code == "d'") D(), D(), D();
-		else if (move_code == "l'") L(), L(), L();
-		else if (move_code == "r'") R(), R(), R();
-		else if (move_code == "f'") F(), F(), F();
-		else if (move_code == "b'") B(), B(), B();
+		if (move_code == "U") U();
+		else if (move_code == "D") D();
+		else if (move_code == "L") L();
+		else if (move_code == "R") R();
+		else if (move_code == "F") F();
+		else if (move_code == "B") B();
 
-		else if (move_code == "u2") U(), U();
-		else if (move_code == "d2") D(), D();
-		else if (move_code == "l2") L(), L();
-		else if (move_code == "r2") R(), R();
-		else if (move_code == "f2") F(), F();
-		else if (move_code == "b2") B(), B();
+		else if (move_code == "U'") U(), U(), U();
+		else if (move_code == "D'") D(), D(), D();
+		else if (move_code == "L'") L(), L(), L();
+		else if (move_code == "R'") R(), R(), R();
+		else if (move_code == "F'") F(), F(), F();
+		else if (move_code == "B'") B(), B(), B();
+
+		else if (move_code == "U2") U(), U();
+		else if (move_code == "D2") D(), D();
+		else if (move_code == "L2") L(), L();
+		else if (move_code == "R2") R(), R();
+		else if (move_code == "F2") F(), F();
+		else if (move_code == "B2") B(), B();
 	}
 }
 
