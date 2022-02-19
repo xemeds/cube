@@ -16,7 +16,8 @@ class Cube {
 		Cube(const Cube &new_cube);
 		void print();
 
-		void move(string move_code);
+		bool valid_move(string move_code);
+		void move(string move_codes);
 		void U();
 		void D();
 		void L();

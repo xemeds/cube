@@ -88,29 +88,59 @@ void Cube::print() {
 	}
 }
 
-// Performs the given move on the cube
-void Cube::move(string move_code) {
+// Returns true if a given move is valid, false if not
+bool Cube::valid_move(string move_code) {
 	transform(move_code.begin(), move_code.end(), move_code.begin(), ::tolower);
-	if (move_code == "u") U();
-	else if (move_code == "d") D();
-	else if (move_code == "l") L();
-	else if (move_code == "r") R();
-	else if (move_code == "f") F();
-	else if (move_code == "b") B();
 
-	else if (move_code == "u'") U(), U(), U();
-	else if (move_code == "d'") D(), D(), D();
-	else if (move_code == "l'") L(), L(), L();
-	else if (move_code == "r'") R(), R(), R();
-	else if (move_code == "f'") F(), F(), F();
-	else if (move_code == "b'") B(), B(), B();
+	long unsigned int move_code_size = move_code.size();
+	if (move_code_size > 2 || move_code_size == 0) return false;
 
-	else if (move_code == "u2") U(), U();
-	else if (move_code == "d2") D(), D();
-	else if (move_code == "l2") L(), L();
-	else if (move_code == "r2") R(), R();
-	else if (move_code == "f2") F(), F();
-	else if (move_code == "b2") B(), B();
+	if (move_code_size == 2 && move_code[1] != '\'' && move_code[1] != '2') return false;
+	if (move_code[0] != 'u' && move_code[0] != 'd' && move_code[0] != 'l' && move_code[0] != 'r' && move_code[0] != 'f' && move_code[0] != 'b') return false;
+
+	return true;
+}
+
+// Performs the given moves on the cube
+void Cube::move(string move_codes) {
+	transform(move_codes.begin(), move_codes.end(), move_codes.begin(), ::tolower);
+
+	for (long unsigned int i = 0; i < move_codes.size(); i++) {
+		string move_code;
+		// Length 2 moves
+		if (valid_move(string() + move_codes[i] + move_codes[i + 1])) {
+			move_code = string() + move_codes[i] + move_codes[i + 1];
+			i++;
+		}
+		// Length 1 moves
+		else if (valid_move(string() + move_codes[i])) {
+			move_code = string() + move_codes[i];
+		}
+		else {
+			break;
+		}
+
+		if (move_code == "u") U();
+		else if (move_code == "d") D();
+		else if (move_code == "l") L();
+		else if (move_code == "r") R();
+		else if (move_code == "f") F();
+		else if (move_code == "b") B();
+
+		else if (move_code == "u'") U(), U(), U();
+		else if (move_code == "d'") D(), D(), D();
+		else if (move_code == "l'") L(), L(), L();
+		else if (move_code == "r'") R(), R(), R();
+		else if (move_code == "f'") F(), F(), F();
+		else if (move_code == "b'") B(), B(), B();
+
+		else if (move_code == "u2") U(), U();
+		else if (move_code == "d2") D(), D();
+		else if (move_code == "l2") L(), L();
+		else if (move_code == "r2") R(), R();
+		else if (move_code == "f2") F(), F();
+		else if (move_code == "b2") B(), B();
+	}
 }
 
 // Rotates the tiles of a given face of the cube clockwise
