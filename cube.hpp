@@ -28,6 +28,9 @@ class Cube {
 		void R();
 		void F();
 		void B();
+		void M();
+		void E();
+		void S();
 	private:
 		Color m_cube[6][9];
 		vector<string> m_moves;
@@ -131,12 +134,12 @@ bool Cube::valid_move(string move_code) {
 	if (move_code_size > 2 || move_code_size == 0) return false;
 
 	if (move_code_size == 2 && move_code[1] != '\'' && move_code[1] != '2') return false;
-	if (move_code[0] != 'U' && move_code[0] != 'D' && move_code[0] != 'L' && move_code[0] != 'R' && move_code[0] != 'F' && move_code[0] != 'B') return false;
+	if (move_code[0] != 'U' && move_code[0] != 'D' && move_code[0] != 'L' && move_code[0] != 'R' && move_code[0] != 'F' && move_code[0] != 'B' && move_code[0] != 'M' && move_code[0] != 'E' && move_code[0] != 'S') return false;
 
 	return true;
 }
 
-// Returns the performed movess on the cube
+// Returns the performed moves on the cube
 vector<string> Cube::get_moves() {
 	return m_moves;
 }
@@ -182,6 +185,18 @@ void Cube::move(string move_codes) {
 		else if (move_code == "R2") R(), R();
 		else if (move_code == "F2") F(), F();
 		else if (move_code == "B2") B(), B();
+
+		else if (move_code == "M") M();
+		else if (move_code == "E") E();
+		else if (move_code == "S") S();
+
+		else if (move_code == "M'") M(), M(), M();
+		else if (move_code == "E'") E(), E(), E();
+		else if (move_code == "S'") S(), S(), S();
+
+		else if (move_code == "M2") M(), M();
+		else if (move_code == "E2") E(), E();
+		else if (move_code == "S2") S(), S();
 	}
 }
 
@@ -266,6 +281,36 @@ void Cube::B() {
 	for (int row = 0; row < 3; row++) m_cube[5][6 + row] = current_cube.m_cube[1][3 * row];
 
 	rotate_face(4);
+}
+
+// Slice move M
+void Cube::M() {
+	Cube current_cube = *this;
+
+	for (int row = 0; row < 3; row++) m_cube[0][1 + (3 * row)] = current_cube.m_cube[4][7 - (3 * row)];
+	for (int row = 0; row < 3; row++) m_cube[2][1 + (3 * row)] = current_cube.m_cube[0][1 + (3 * row)];
+	for (int row = 0; row < 3; row++) m_cube[4][1 + (3 * row)] = current_cube.m_cube[5][7 - (3 * row)];
+	for (int row = 0; row < 3; row++) m_cube[5][1 + (3 * row)] = current_cube.m_cube[2][1 + (3 * row)];
+}
+
+// Slice move E
+void Cube::E() {
+	Cube current_cube = *this;
+
+	for (int row = 0; row < 3; row++) m_cube[1][3 + row] = current_cube.m_cube[4][3 + row];
+	for (int row = 0; row < 3; row++) m_cube[2][3 + row] = current_cube.m_cube[1][3 + row];
+	for (int row = 0; row < 3; row++) m_cube[3][3 + row] = current_cube.m_cube[2][3 + row];
+	for (int row = 0; row < 3; row++) m_cube[4][3 + row] = current_cube.m_cube[3][3 + row];
+}
+
+// Slice move S
+void Cube::S() {
+	Cube current_cube = *this;
+
+	for (int row = 0; row < 3; row++) m_cube[0][3 + row] = current_cube.m_cube[1][7 - (3 * row)];
+	for (int row = 0; row < 3; row++) m_cube[1][1 + (3 * row)] = current_cube.m_cube[5][3 + row];
+	for (int row = 0; row < 3; row++) m_cube[3][1 + (3 * row)] = current_cube.m_cube[0][3 + row];
+	for (int row = 0; row < 3; row++) m_cube[5][3 + row] = current_cube.m_cube[3][7 - (3 * row)];
 }
 
 #endif /* CUBE_HPP */
