@@ -17,6 +17,7 @@ class Cube {
 	public:
 		Cube();
 		Cube(const Cube &new_cube);
+		void reset();
 		void print();
 
 		bool valid_move(string move_code);
@@ -93,6 +94,11 @@ Cube::Cube(const Cube &cube) {
 			m_cube[face][tile] = cube.m_cube[face][tile];
 		}
 	}
+}
+
+// Resets the cube
+void Cube::reset() {
+	*this = Cube();
 }
 
 // Prints the cube using the first letter of the colors
