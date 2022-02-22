@@ -23,6 +23,9 @@ class Cube {
 		bool valid_move(string move_code);
 		vector<string> get_moves();
 		void move(string move_codes);
+		void X();
+		void Y();
+		void Z();
 		void U();
 		void D();
 		void L();
@@ -36,7 +39,8 @@ class Cube {
 		Color m_cube[6][9];
 		vector<string> m_moves;
 
-		void rotate_face(int face);
+		void rotate_face(int face, bool anticlockwise = false);
+		void set_face(int faces[6][2], int pair_amount);
 };
 
 // Returns the first letter of the color enumeration
@@ -140,7 +144,7 @@ bool Cube::valid_move(string move_code) {
 	if (move_code_size > 2 || move_code_size == 0) return false;
 
 	if (move_code_size == 2 && move_code[1] != '\'' && move_code[1] != '2') return false;
-	if (move_code[0] != 'U' && move_code[0] != 'D' && move_code[0] != 'L' && move_code[0] != 'R' && move_code[0] != 'F' && move_code[0] != 'B' && move_code[0] != 'M' && move_code[0] != 'E' && move_code[0] != 'S') return false;
+	if (move_code[0] != 'X' && move_code[0] != 'Y' && move_code[0] != 'Z' && move_code[0] != 'U' && move_code[0] != 'D' && move_code[0] != 'L' && move_code[0] != 'R' && move_code[0] != 'F' && move_code[0] != 'B' && move_code[0] != 'M' && move_code[0] != 'E' && move_code[0] != 'S') return false;
 
 	return true;
 }
@@ -171,7 +175,19 @@ void Cube::move(string move_codes) {
 
 		m_moves.push_back(move_code);
 
-		if (move_code == "U") U();
+		if (move_code == "X") X();
+		else if (move_code == "Y") Y();
+		else if (move_code == "Z") Z();
+
+		else if (move_code == "X'") X(), X(), X();
+		else if (move_code == "Y'") Y(), Y(), Y();
+		else if (move_code == "Z'") Z(), Z(), Z();
+
+		else if (move_code == "X2") X(), X();
+		else if (move_code == "Y2") Y(), Y();
+		else if (move_code == "Z2") Z(), Z();
+
+		else if (move_code == "U") U();
 		else if (move_code == "D") D();
 		else if (move_code == "L") L();
 		else if (move_code == "R") R();
@@ -206,15 +222,68 @@ void Cube::move(string move_codes) {
 	}
 }
 
-// Rotates the tiles of a given face of the cube clockwise
-void Cube::rotate_face(int face) {
+// Rotates the tiles of a given face of the cube clockwise or anticlockwise
+void Cube::rotate_face(int face, bool anticlockwise /*= false*/) {
 	Cube current_cube = *this;
 
-	for (int row = 0; row < 3; row++) {
-		for (int tile = 0; tile < 3; tile++) {
-			m_cube[face][(3 * row) + tile] = current_cube.m_cube[face][6 + row - (3 * tile)];
+	if (anticlockwise) {
+		for (int row = 0; row < 3; row++) {
+			for (int tile = 0; tile < 3; tile++) {
+				m_cube[face][(3 * row) + tile] = current_cube.m_cube[face][2 - row + (3 * tile)];
+			}
 		}
 	}
+	else {
+		for (int row = 0; row < 3; row++) {
+			for (int tile = 0; tile < 3; tile++) {
+				m_cube[face][(3 * row) + tile] = current_cube.m_cube[face][6 + row - (3 * tile)];
+			}
+		}
+	}
+}
+
+// Sets the tiles of faces[x][0] to faces[x][1]
+void Cube::set_face(int faces[6][2], int pair_amount) {
+	Cube current_cube = *this;
+
+	for (int pair = 0; pair < pair_amount; pair++) {
+		for (int tile = 0; tile < 9; tile++) m_cube[faces[pair][0]][tile] = current_cube.m_cube[faces[pair][1]][tile];
+	}
+}
+
+// Rotation move X
+void Cube::X() {
+	int face_changes[][2] = {{0, 2}, {2, 5}, {4, 0}, {5, 4}};
+	set_face(face_changes, 4);
+
+	rotate_face(1, true);
+	rotate_face(3);
+	rotate_face(4);
+	rotate_face(4);
+	rotate_face(5);
+	rotate_face(5);
+}
+
+// Rotation move Y
+void Cube::Y() {
+	int face_changes[][2] = {{1, 2}, {2, 3}, {3, 4}, {4, 1}};
+	set_face(face_changes, 4);
+
+	rotate_face(0);
+	rotate_face(5, true);
+}
+
+// Rotation move Z
+void Cube::Z() {
+	int face_changes[][2] = {{0, 1}, {1, 5}, {3, 0}, {5, 3}};
+	set_face(face_changes, 4);
+
+	rotate_face(0);
+	rotate_face(1);
+	rotate_face(2);
+	rotate_face(3);
+	rotate_face(4, true);
+	rotate_face(5);
 }
 
 // Up
