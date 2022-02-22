@@ -13,6 +13,15 @@ enum Color { WHITE, RED, BLUE, ORANGE, GREEN, YELLOW };
 
 char get_letter(Color color);
 
+// Converts a string of moves to the correct format (uppercasing everything except 'w')
+string format(string move_codes) {
+	for (long unsigned int i = 0; i < move_codes.size(); i++) {
+		if (move_codes[i] == 'W') move_codes[i] = 'w';
+		else if (move_codes[i] != 'w') move_codes[i] = toupper(move_codes[i]);
+	}
+	return move_codes;
+}
+
 class Cube {
 	public:
 		Cube();
@@ -32,6 +41,12 @@ class Cube {
 		void R();
 		void F();
 		void B();
+		void U_wide();
+		void D_wide();
+		void L_wide();
+		void R_wide();
+		void F_wide();
+		void B_wide();
 		void M();
 		void E();
 		void S();
@@ -138,12 +153,13 @@ void Cube::print() {
 
 // Returns true if a given move is valid, false if not
 bool Cube::valid_move(string move_code) {
-	transform(move_code.begin(), move_code.end(), move_code.begin(), ::toupper);
+	move_code = format(move_code);
 
 	long unsigned int move_code_size = move_code.size();
-	if (move_code_size > 2 || move_code_size == 0) return false;
+	if (move_code_size > 3 || move_code_size == 0) return false;
 
-	if (move_code_size == 2 && move_code[1] != '\'' && move_code[1] != '2') return false;
+	if (move_code_size == 3 && (move_code[1] != 'w' || (move_code[2] != '\'' && move_code[2] != '2'))) return false;
+	if (move_code_size == 2 && move_code[1] != '\'' && move_code[1] != '2' && move_code[1] != 'w') return false;
 	if (move_code[0] != 'X' && move_code[0] != 'Y' && move_code[0] != 'Z' && move_code[0] != 'U' && move_code[0] != 'D' && move_code[0] != 'L' && move_code[0] != 'R' && move_code[0] != 'F' && move_code[0] != 'B' && move_code[0] != 'M' && move_code[0] != 'E' && move_code[0] != 'S') return false;
 
 	return true;
@@ -156,12 +172,17 @@ vector<string> Cube::get_moves() {
 
 // Performs the given moves on the cube
 void Cube::move(string move_codes) {
-	transform(move_codes.begin(), move_codes.end(), move_codes.begin(), ::toupper);
+	move_codes = format(move_codes);
 
 	for (long unsigned int i = 0; i < move_codes.size(); i++) {
 		string move_code;
+		// Length 3 moves
+		if (valid_move(string() + move_codes[i] + move_codes[i + 1] + move_codes[i + 2])) {
+			move_code = string() + move_codes[i] + move_codes[i + 1] + move_codes[i + 2];
+			i += 2;
+		}
 		// Length 2 moves
-		if (valid_move(string() + move_codes[i] + move_codes[i + 1])) {
+		else if (valid_move(string() + move_codes[i] + move_codes[i + 1])) {
 			move_code = string() + move_codes[i] + move_codes[i + 1];
 			i++;
 		}
@@ -207,6 +228,27 @@ void Cube::move(string move_codes) {
 		else if (move_code == "R2") R(), R();
 		else if (move_code == "F2") F(), F();
 		else if (move_code == "B2") B(), B();
+
+		else if (move_code == "Uw") U_wide();
+		else if (move_code == "Dw") D_wide();
+		else if (move_code == "Lw") L_wide();
+		else if (move_code == "Rw") R_wide();
+		else if (move_code == "Fw") F_wide();
+		else if (move_code == "Bw") B_wide();
+
+		else if (move_code == "Uw'") U_wide(), U_wide(), U_wide();
+		else if (move_code == "Dw'") D_wide(), D_wide(), D_wide();
+		else if (move_code == "Lw'") L_wide(), L_wide(), L_wide();
+		else if (move_code == "Rw'") R_wide(), R_wide(), R_wide();
+		else if (move_code == "Fw'") F_wide(), F_wide(), F_wide();
+		else if (move_code == "Bw'") B_wide(), B_wide(), B_wide();
+
+		else if (move_code == "Uw2") U_wide(), U_wide();
+		else if (move_code == "Dw2") D_wide(), D_wide();
+		else if (move_code == "Lw2") L_wide(), L_wide();
+		else if (move_code == "Rw2") R_wide(), R_wide();
+		else if (move_code == "Fw2") F_wide(), F_wide();
+		else if (move_code == "Bw2") B_wide(), B_wide();
 
 		else if (move_code == "M") M();
 		else if (move_code == "E") E();
@@ -357,6 +399,24 @@ void Cube::B() {
 
 	rotate_face(4);
 }
+
+// Up wide
+void Cube::U_wide() { D(), Y(); }
+
+// Down wide
+void Cube::D_wide() { U(), Y(), Y(), Y(); }
+
+// Left wide
+void Cube::L_wide() { R(), X(), X(), X(); }
+
+// Right wide
+void Cube::R_wide() { L(), X(); }
+
+// Front wide
+void Cube::F_wide() { B(), Z(); }
+
+// Back wide
+void Cube::B_wide() { F(), Z(), Z(), Z(); }
 
 // Slice move M
 void Cube::M() {
