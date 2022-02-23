@@ -12,26 +12,27 @@ using namespace std;
 enum Color { WHITE, RED, BLUE, ORANGE, GREEN, YELLOW };
 
 char get_letter(Color color);
-
-// Converts a string of moves to the correct format (uppercasing everything except 'w')
-string format(string move_codes) {
-	for (long unsigned int i = 0; i < move_codes.size(); i++) {
-		if (move_codes[i] == 'W') move_codes[i] = 'w';
-		else if (move_codes[i] != 'w') move_codes[i] = toupper(move_codes[i]);
-	}
-	return move_codes;
-}
+string format(string move_codes);
 
 class Cube {
 	public:
 		Cube();
+		Cube(Color colors[6]);
 		Cube(const Cube &new_cube);
 		void reset();
+		void reset(Color colors[6]);
 		void print();
 
 		bool valid_move(string move_code);
 		vector<string> get_moves();
 		void move(string move_codes);
+
+	private:
+		Color m_cube[6][9];
+		vector<string> m_moves;
+
+		void rotate_face(int face, bool anticlockwise = false);
+		void set_face(int faces[6][2], int pair_amount);
 		void X();
 		void Y();
 		void Z();
@@ -50,12 +51,6 @@ class Cube {
 		void M();
 		void E();
 		void S();
-	private:
-		Color m_cube[6][9];
-		vector<string> m_moves;
-
-		void rotate_face(int face, bool anticlockwise = false);
-		void set_face(int faces[6][2], int pair_amount);
 };
 
 // Returns the first letter of the color enumeration
@@ -78,30 +73,26 @@ char get_letter(Color color) {
 	}
 }
 
-// Sets the starting state of the cube
+// Converts a string of moves to the correct format (uppercasing everything except 'w')
+string format(string move_codes) {
+	for (long unsigned int i = 0; i < move_codes.size(); i++) {
+		if (move_codes[i] == 'W') move_codes[i] = 'w';
+		else if (move_codes[i] != 'w') move_codes[i] = toupper(move_codes[i]);
+	}
+	return move_codes;
+}
+
+// Sets the default starting state of the cube
 Cube::Cube() {
+	Color colors[6] = {WHITE, RED, BLUE, ORANGE, GREEN, YELLOW};
+	*this = Cube(colors);
+}
+
+// Sets the starting state of the cube with the given face colors
+Cube::Cube(Color colors[6]) {
 	for (int face = 0; face < 6; face++) {
 		for (int tile = 0; tile < 9; tile++) {
-			switch (face) {
-				case 0:
-					m_cube[face][tile] = WHITE;
-					break;
-				case 1:
-					m_cube[face][tile] = RED;
-					break;
-				case 2:
-					m_cube[face][tile] = BLUE;
-					break;
-				case 3:
-					m_cube[face][tile] = ORANGE;
-					break;
-				case 4:
-					m_cube[face][tile] = GREEN;
-					break;
-				case 5:
-					m_cube[face][tile] = YELLOW;
-					break;
-			}
+			m_cube[face][tile] = colors[face];
 		}
 	}
 }
@@ -115,9 +106,14 @@ Cube::Cube(const Cube &cube) {
 	}
 }
 
-// Resets the cube
+// Resets the cube to the default starting state
 void Cube::reset() {
 	*this = Cube();
+}
+
+// Resets the cube with the given face colors
+void Cube::reset(Color colors[6]) {
+	*this = Cube(colors);
 }
 
 // Prints the cube using the first letter of the colors
