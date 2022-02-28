@@ -8,9 +8,8 @@ Single-file Rubik's Cube library. Use it to easily model and perform moves on a 
 
 The idea behind single-header file libraries is that they're easy to distribute and deploy because all the code is contained in a single file. By default, the .hpp file here acts as its own header file, i.e. they declare the functions contained in the file but don't actually result in any code getting compiled.
 
-So in addition, you should select exactly one C++ source file that actually instantiates the code, preferably a file you're not editing frequently. This file should define a specific macro to actually enable the function definitions.
+So in addition, you should select exactly one C++ source file that actually instantiates the code, preferably a file you're not editing frequently. This file should include the library to actually enable the function definitions.
 
-	#define CUBE_HPP_IMPLEMENTATION
 	#include "cube.hpp"
 
 ## Usage
@@ -76,10 +75,10 @@ Get the moves performed on the cube since its reset:
 
 All the different moves were added from the [Rubik's Cube Move Notations](https://jperm.net/3x3/moves). Below are all the valid moves (upper or lower casing does not matter).
 
-Basic moves: `U D L R F B U' D' L' R' F' B' U2 D2 L2 R2 F2 B2`
-Wide moves: `Uw Dw Lw Rw Fw Bw Uw' Dw' Lw' Rw' Fw' Bw' Uw2 Dw2 Lw2 Rw2 Fw2 Bw2`
-Slice moves: `M E S M' E' S' M2 E2 S2`
-Rotation moves: `X Y Z X' Y' Z' X2 Y2 Z2`
+- Basic moves: `U D L R F B U' D' L' R' F' B' U2 D2 L2 R2 F2 B2`
+- Wide moves: `Uw Dw Lw Rw Fw Bw Uw' Dw' Lw' Rw' Fw' Bw' Uw2 Dw2 Lw2 Rw2 Fw2 Bw2`
+- Slice moves: `M E S M' E' S' M2 E2 S2`
+- Rotation moves: `X Y Z X' Y' Z' X2 Y2 Z2`
 
 # How the cube is modelled
 
@@ -127,8 +126,8 @@ Additionally, when printing the cube to the console, the faces are printed in th
 
 # References
 
-List of valid moves: [https://jperm.net/3x3/moves](https://jperm.net/3x3/moves)
-Single-file library explaination: [https://github.com/nothings/stb](https://github.com/nothings/stb)
+- List of valid moves: [https://jperm.net/3x3/moves](https://jperm.net/3x3/moves)
+- Single-file library explaination: [https://github.com/nothings/stb](https://github.com/nothings/stb)
 
 # License
 
