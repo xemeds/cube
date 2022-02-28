@@ -23,10 +23,10 @@ class Cube {
 		void reset(Color colors[6]);
 		void print();
 
-		bool is_solved();
-		bool valid_move(string move_code);
-		vector<string> get_moves();
+		bool is_valid_move(string move_code);
 		void move(string move_codes);
+		vector<string> get_moves();
+		bool is_solved();
 
 	private:
 		Color m_cube[6][9];
@@ -165,7 +165,7 @@ bool Cube::is_solved() {
 }
 
 // Returns true if a given move is valid, false if not
-bool Cube::valid_move(string move_code) {
+bool Cube::is_valid_move(string move_code) {
 	move_code = format(move_code);
 
 	long unsigned int move_code_size = move_code.size();
@@ -190,17 +190,17 @@ void Cube::move(string move_codes) {
 	for (long unsigned int i = 0; i < move_codes.size(); i++) {
 		string move_code;
 		// Length 3 moves
-		if (valid_move(string() + move_codes[i] + move_codes[i + 1] + move_codes[i + 2])) {
+		if (is_valid_move(string() + move_codes[i] + move_codes[i + 1] + move_codes[i + 2])) {
 			move_code = string() + move_codes[i] + move_codes[i + 1] + move_codes[i + 2];
 			i += 2;
 		}
 		// Length 2 moves
-		else if (valid_move(string() + move_codes[i] + move_codes[i + 1])) {
+		else if (is_valid_move(string() + move_codes[i] + move_codes[i + 1])) {
 			move_code = string() + move_codes[i] + move_codes[i + 1];
 			i++;
 		}
 		// Length 1 moves
-		else if (valid_move(string() + move_codes[i])) {
+		else if (is_valid_move(string() + move_codes[i])) {
 			move_code = string() + move_codes[i];
 		}
 		else {
