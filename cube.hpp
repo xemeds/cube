@@ -23,6 +23,7 @@ class Cube {
 		void reset(Color colors[6]);
 		void print();
 
+		bool is_solved();
 		bool valid_move(string move_code);
 		vector<string> get_moves();
 		void move(string move_codes);
@@ -145,6 +146,22 @@ void Cube::print() {
 		}
 		printf("\n");
 	}
+}
+
+// Returns true if the cube is solved, false if not
+bool Cube::is_solved() {
+	vector<Color> checked_colors;
+
+	for (int face = 0; face < 6; face++) {
+		Color center_color = m_cube[face][4];
+		if (find(checked_colors.begin(), checked_colors.end(), center_color) != checked_colors.end()) return false;
+		checked_colors.push_back(center_color);
+		for (int tile = 0; tile < 9; tile++) {
+			if (m_cube[face][tile] != center_color) return false;
+		}
+	}
+
+	return true;
 }
 
 // Returns true if a given move is valid, false if not
